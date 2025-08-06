@@ -13,5 +13,14 @@ def parser_cli_file_manager():
     parser.add_argument('name3',type=str, nargs='?', default=None)  # positional argument
     args = parser.parse_args()
 
+    if args.operation in operation.values():
+        if args.operation == operation[3]:
+            print(help_reference(args.operation, args.name1))
+
+        elif args.operation == operation[4]:
+            preparing_for_work()
+    else:
+        print(f'Ведённая команда {args.operation} не является командой CLI_files_manager. Поддерживаемые команды "help, test, copy, count, delete".'  )
+
 if __name__ == '__main__':
     parser = parser_cli_file_manager()
