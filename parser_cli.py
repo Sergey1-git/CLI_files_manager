@@ -1,5 +1,6 @@
 import argparse
 import os
+from package_clt_files_manager.func_cli_files_manager import preparing_for_work
 operation={0: 'copy', 1: 'count', 2: 'delete',3: 'help', 4: 'test'}
 
 def parser_cli_file_manager():
