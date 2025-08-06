@@ -21,10 +21,8 @@ def preparing_for_work():
         file.write("hello world " * 10)
     if "folder_test2" not in os.listdir(path_folder_test):
         os.mkdir(path_folder_test2)
-    open(path_test3, "w")
     with open(path_test3, "w") as file:
         file.write("hello world " * 1000)
-    open(path_test4, "w")
     with open(path_test4, "w") as file:
         file.write("hello world " * 100)
     print('Папка для тестирования "folder_test" создана.')
@@ -51,3 +49,29 @@ def help_reference(name1, name2=None):
         else:
             string=f'Ведённая команда {name2} не является командой CLI_files_manager. Поддерживаемые команды "copy, count, delete, help"'
             return string
+
+# функция определения путей папок и файлов
+def find_folders_and_files(folder_name, file_name):
+    list_path = []
+    for root, dirs, files in os.walk(os.getcwd()):
+        if folder_name in dirs:
+            if file_name is None:
+                path_folder = os.path.join(root, folder_name)
+                list_path.append(path_folder)
+            else:
+                path_folder = os.path.join(root, folder_name)
+                if file_name in os.listdir(path_folder):
+                    path_file_name = os.path.join(path_folder, file_name)
+                    list_path.append(path_file_name)
+    if len(list_path)==1:
+        return list_path[0]
+    elif len(list_path)>1:
+        print('Найдено несколько подходящих объектов.', *list_path)
+        while True:
+            path=input('Ведите необходимый вам путь ')
+            if path in list_path:
+                return path
+            else:
+                print('Вы ввели не верный  путь, попробуйте снова.')
+    else:
+        return None
