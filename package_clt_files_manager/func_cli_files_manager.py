@@ -75,3 +75,19 @@ def find_folders_and_files(folder_name, file_name):
                 print('Вы ввели не верный  путь, попробуйте снова.')
     else:
         return None
+
+
+# функция копирования фалов
+def copy_file(path_root_folder,file_name,path_folder_record):
+    path_file_name = os.path.join(path_root_folder,file_name)
+    path_file_name_copy = os.path.join(path_folder_record,file_name)
+    if path_file_name_copy == path_file_name:
+        name = file_name
+        name_parts = name.partition(".")
+        name = f'{name_parts[0] + '_копия'}{name_parts[1]}{name_parts[2]}'
+        path_file_name_copy = os.path.join(path_folder_record, name)
+        shutil.copy(path_file_name, path_file_name_copy)
+        print(f"Файл {file_name} успешно скопирован в папку {os.path.basename(path_root_folder)} как {name}.")
+    else:
+        shutil.copy(path_file_name, path_file_name_copy)
+        print(f"Файл {file_name} успешно скопирован в папку {os.path.basename(path_folder_record)}.")
