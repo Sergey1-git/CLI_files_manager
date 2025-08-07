@@ -58,7 +58,6 @@ def help_reference(name1, name2=None):
 # функция определения путей папок и файлов
 def find_folders_and_files(folder_name, file_name):
     list_path = []
-    print('####',os.getcwd())
     for root, dirs, files in os.walk(editing_a_path()):
         if folder_name in dirs:
             if file_name is None:
@@ -123,14 +122,9 @@ def count_files_recursive(path_folder):
 
 def editing_a_path():
     path_folder_test = os.getcwd()
-    print('@@@', path_folder_test)
-    # absolute_path = os.path.abspath('CLI_files_manager/folder_testh')
     if 'package_cli_files_manager' in path_folder_test:
         folder_test = path_folder_test.replace('\\package_cli_files_manager', '')
-        # folder_test = path_folder_test.replace('', '')
-        print('@@@##', folder_test)
         return folder_test
     else:
         folder_test = path_folder_test
-        print('@@@##', folder_test)
         return folder_test

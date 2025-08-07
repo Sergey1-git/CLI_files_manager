@@ -36,12 +36,12 @@ def parser_cli_file_manager():
                                 p_cli_fm.copy_file(path_root_folder,args.name2,path_folder_record)
                             else:
                                 print(f'Невозможно выполнить копирование файла {args.name2}, папка записи {args.name3} не существует,'
-                                      f' либо находится за пределами {os.path.basename(p_cli_fm.path_folder_test)}.')
+                                      f' либо находится за пределами {os.path.basename(path_folder_test)}.')
                         else:
                             print(f'Невозможно выполнить копирование файла {args.name2}, файл отсутствует в папке {args.name1}.')
                     else:
                         print(f'Невозможно выполнить копирование файла {args.name2}, исходная папка {args.name1} не существует,'
-                              f' либо находится за пределами {os.path.basename(p_cli_fm.path_folder_test)}.')
+                              f' либо находится за пределами {os.path.basename(path_folder_test)}.')
 
                 elif args.operation == operation[1]:
                     path_folder = p_cli_fm.find_folders_and_files(args.name1, None)
@@ -50,7 +50,7 @@ def parser_cli_file_manager():
                         print(f'Количество файлов в папке {args.name1} равно {number}.')
                     else:
                         print(f'Невозможно выполнить подсчет файлов в папке {args.name1}, папка {args.name1} не существует,'
-                              f' либо находится за пределами {os.path.basename(p_cli_fm.path_folder_test)}.')
+                              f' либо находится за пределами {os.path.basename(path_folder_test)}.')
 
             else:
                 print(f'Количество введенных аргументов команды {args.operation} не соответствует требуемому синтаксису.')

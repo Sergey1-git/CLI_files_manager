@@ -54,16 +54,12 @@ class TestCount_files_recursive(unittest.TestCase):
             total_files+=len(files)
         self.assertEqual(count_files_recursive(path_folder_test),total_files)
 
+
 def editing_a_path():
     path_folder_test = os.getcwd()
-    print('@@@', path_folder_test)
-    # absolute_path = os.path.abspath('CLI_files_manager/folder_testh')
     if 'package_cli_files_manager' in path_folder_test:
         folder_test = path_folder_test.replace('\\package_cli_files_manager', '')
-        # folder_test = path_folder_test.replace('', '')
-        print('@@@##', folder_test)
         return folder_test
     else:
         folder_test = path_folder_test
-        print('@@@##', folder_test)
         return folder_test
