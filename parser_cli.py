@@ -20,6 +20,28 @@ def parser_cli_file_manager():
 
         elif args.operation == operation[4]:
             preparing_for_work()
+
+        elif os.path.isdir(path_folder_test)==True:
+            if name_verification_for_None(args)==True:
+                if args.operation == operation[0]:
+                    path_root_folder = find_folders_and_files(args.name1, None)
+                    path_folder_record = find_folders_and_files(args.name3, None)
+                    if path_root_folder!=None and os.path.isdir(path_root_folder)==True:
+                        if args.name2 in os.listdir(path_root_folder):
+                            if path_folder_record !=None and os.path.isdir(path_folder_record)==True:
+                                copy_file(path_root_folder,args.name2,path_folder_record)
+                            else:
+                                print(f'Невозможно выполнить копирование файла {args.name2}, папка записи {args.name3} не существует,'
+                                      f' либо находится за пределами {os.path.basename(path_folder_test)}.')
+                        else:
+                            print(f'Невозможно выполнить копирование файла {args.name2}, файл отсутствует в папке {args.name1}.')
+                    else:
+                        print(f'Невозможно выполнить копирование файла {args.name2}, исходная папка {args.name1} не существует,'
+                              f' либо находится за пределами {os.path.basename(path_folder_test)}.')
+            else:
+                print(f'Количество введенных аргументов команды {args.operation} не соответствует требуемому синтаксису.')
+        else:
+            print('Для работы требуется создать папку для тестов. Для создания папки используйте команду "test"')
     else:
         print(f'Ведённая команда {args.operation} не является командой CLI_files_manager. Поддерживаемые команды "help, test, copy, count, delete".')
 
