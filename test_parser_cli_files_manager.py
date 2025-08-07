@@ -1,13 +1,35 @@
 import unittest
 import subprocess
 import sys
+from parser_cli import operation
 
+operation_test = {0: 'copy', 1: 'count', 2: 'delete', 3: 'help', 4: 'test'}
 class TestParser_CLI(unittest.TestCase):
+
+    def test_operation_dict(self):
+        print('Проверка, что словарь команд соответствует заданным параметрам.')
+        self.assertEqual(operation_test, operation)
+
+
+    def test_operation(self):
+        print('Проверка, что вводимая команда не поддерживается CLI_files_manager.')
+        test_cases = [
+            ('copy', 'Количество введенных аргументов команды copy не соответствует требуемому синтаксису.\n'),
+            ('del', 'Ведённая команда del не является командой CLI_files_manager.'
+                    ' Поддерживаемые команды "help, test, copy, count, delete".\n'),
+        ]
+        for expression, result in test_cases:
+            with self.subTest(expression=expression):
+                cli_result = subprocess.run([sys.executable, 'parser_CLI.py', expression],
+                                            capture_output=True, text=True)
+                text = cli_result.stdout.encode('windows-1251')
+                cli_result = text.decode('utf-8')
+                self.assertEqual(result, cli_result)
 
     def test_operation_copy(self):
         print('Проверка, что при правильном вводе команды copy выводятся соответствующий результат.')
-        cli_result = subprocess.run([sys.executable, 'parser_CLI.py', 'copy', 'folder_test', 'test1.txt','folder_test2' ],
-                                    capture_output=True, text=True)
+        cli_result = subprocess.run([sys.executable, 'parser_CLI.py', 'copy', 'folder_test', 'test1.txt',
+                                     'folder_test2' ],capture_output=True, text=True)
         text=cli_result.stdout.encode('windows-1251')
         cli_result=text.decode('utf-8')
         self.assertEqual('Файл test1.txt успешно скопирован в папку folder_test2.\n' , cli_result)
