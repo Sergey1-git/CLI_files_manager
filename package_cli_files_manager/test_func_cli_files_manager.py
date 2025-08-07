@@ -1,12 +1,24 @@
 import unittest
 import os
-from func_cli_files_manager import preparing_for_work, count_files_recursive,find_folders_and_files,path_folder_test, path_test1
+from func_cli_files_manager import preparing_for_work, count_files_recursive,find_folders_and_files
+#from CLI_files_manager.parser_cli import  path_folder_test
 class TestPreparing_for_work(unittest.TestCase):
     def test_preparing_for_work(self):
         print('Проверка, что функция preparing_for_work создает папку folder_test.')
         # создание папки folder_test
-        preparing_for_work()
-        self.assertIn('folder_test',path_folder_test)
+        path_folder_test = os.getcwd()
+        print('@@@',path_folder_test)
+        #absolute_path = os.path.abspath('CLI_files_manager/folder_testh')
+        if 'package_cli_files_manager' in path_folder_test:
+            folder_test=path_folder_test.replace('\\package_cli_files_manager','')
+            #folder_test = path_folder_test.replace('', '')
+            print('@@@##',folder_test)
+        else:
+            folder_test=path_folder_test
+        preparing_for_work(folder_test)
+        print('@@@##AAA', folder_test)
+        #self.assertTrue(os.path.exists(folder_test))
+        self.assertIn('folder_test', os.listdir(folder_test))
 
 class TestFind_Folders_And_Files(unittest.TestCase):
     def test_find_folders(self):

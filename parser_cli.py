@@ -1,8 +1,8 @@
 import argparse
 import os
-import CLI_files_manager.package_cli_files_manager as p_cli_fm
+import package_cli_files_manager as p_cli_fm
 operation={0: 'copy', 1: 'count', 2: 'delete',3: 'help', 4: 'test'}
-#path_folder_test=os.path.join(os.getcwd(), "folder_test")
+path_folder_test=os.path.join(os.getcwd(), "folder_test")
 
 
 def parser_cli_file_manager():
@@ -16,15 +16,17 @@ def parser_cli_file_manager():
     parser.add_argument('name3',type=str, nargs='?', default=None)  # positional argument
     args = parser.parse_args()
 
+    path_folder = os.getcwd()
     if args.operation in operation.values():
         if args.operation == operation[3]:
             print(p_cli_fm.help_reference(args.operation, args.name1))
 
         elif args.operation == operation[4]:
-            p_cli_fm.preparing_for_work()
+            p_cli_fm.preparing_for_work(path_folder)
 
-        elif os.path.isdir(p_cli_fm.path_folder_test):
+        elif os.path.isdir(path_folder_test):
             if p_cli_fm.name_verification_for_None(args):
+
                 if args.operation == operation[0]:
                     path_root_folder = p_cli_fm.find_folders_and_files(args.name1, None)
                     path_folder_record = p_cli_fm.find_folders_and_files(args.name3, None)
@@ -40,6 +42,16 @@ def parser_cli_file_manager():
                     else:
                         print(f'Невозможно выполнить копирование файла {args.name2}, исходная папка {args.name1} не существует,'
                               f' либо находится за пределами {os.path.basename(p_cli_fm.path_folder_test)}.')
+
+                elif args.operation == operation[1]:
+                    path_folder = p_cli_fm.find_folders_and_files(args.name1, None)
+                    if path_folder != None and os.path.isdir(path_folder) == True:
+                        number = p_cli_fm.count_files_recursive(path_folder)
+                        print(f'Количество файлов в папке {args.name1} равно {number}.')
+                    else:
+                        print(f'Невозможно выполнить подсчет файлов в папке {args.name1}, папка {args.name1} не существует,'
+                              f' либо находится за пределами {os.path.basename(p_cli_fm.path_folder_test)}.')
+
             else:
                 print(f'Количество введенных аргументов команды {args.operation} не соответствует требуемому синтаксису.')
         else:

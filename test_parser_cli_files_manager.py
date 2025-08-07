@@ -1,7 +1,9 @@
 import unittest
 import subprocess
 import sys
-from parser_cli import operation
+import os
+from parser_cli import operation, path_folder_test
+#from CLI_files_manager.package_cli_files_manager import path_folder_test
 operation_test = {0: 'copy', 1: 'count', 2: 'delete', 3: 'help', 4: 'test'}
 class TestParser_CLI(unittest.TestCase):
 
@@ -57,3 +59,14 @@ class TestParser_CLI(unittest.TestCase):
                 text = cli_result.stdout.encode('windows-1251')
                 cli_result = text.decode('utf-8')
                 self.assertEqual(result, cli_result)
+
+
+    def test_operation_count(self):
+        print('Проверка, что при правильном вводе команды count выводятся соответствующий результат.')
+        total_files = 0
+        for root, dirs, files in os.walk(path_folder_test):
+            total_files += len(files)
+        cli_result = subprocess.run([sys.executable, 'parser_CLI.py', 'count', 'folder_test'], capture_output=True, text=True)
+        text=cli_result.stdout.encode('windows-1251')
+        cli_result=text.decode('utf-8')
+        self.assertEqual(f"Количество файлов в папке folder_test равно {total_files}.\n" , cli_result)
