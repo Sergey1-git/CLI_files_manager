@@ -1,7 +1,9 @@
 import argparse
 import os
-import package_clt_files_manager as p_cli_fm
+import CLI_files_manager.package_cli_files_manager as p_cli_fm
 operation={0: 'copy', 1: 'count', 2: 'delete',3: 'help', 4: 'test'}
+#path_folder_test=os.path.join(os.getcwd(), "folder_test")
+
 
 def parser_cli_file_manager():
     parser = argparse.ArgumentParser(

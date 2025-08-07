@@ -2,7 +2,6 @@ import unittest
 import subprocess
 import sys
 from parser_cli import operation
-
 operation_test = {0: 'copy', 1: 'count', 2: 'delete', 3: 'help', 4: 'test'}
 class TestParser_CLI(unittest.TestCase):
 

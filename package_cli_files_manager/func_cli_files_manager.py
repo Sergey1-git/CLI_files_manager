@@ -1,8 +1,9 @@
 import shutil
 import os
+#from CLI_files_manager.parser_cli import path_folder_test
 
 # пути для создания папок и файлов, а так же их импорта
-path_folder_test = os.path.join(os.getcwd(), "folder_test")
+path_folder_test=os.path.join(os.path.dirname(os.getcwd()),'folder_test')
 path_test1 = os.path.join(path_folder_test, "test1.txt")
 path_test2 = os.path.join(path_folder_test, "test2.txt")
 path_folder_test2 = os.path.join(path_folder_test, "folder_test2")
@@ -102,3 +103,15 @@ def copy_file(path_root_folder,file_name,path_folder_record):
     else:
         shutil.copy(path_file_name, path_file_name_copy)
         print(f"Файл {file_name} успешно скопирован в папку {os.path.basename(path_folder_record)}.")
+
+
+# функция рекурсивного подсчета файлов в папке
+def count_files_recursive(path_folder):
+    total_files = 0
+    for item in os.scandir(path_folder):
+        item_path = os.path.join(path_folder, item)
+        if os.path.isfile(item_path):
+            total_files += 1
+        elif os.path.isdir(item_path) and len(os.listdir(item_path)) != 0:
+            total_files += count_files_recursive(item_path)
+    return total_files
