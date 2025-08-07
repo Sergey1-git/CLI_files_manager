@@ -1,6 +1,6 @@
 import argparse
 import os
-from package_clt_files_manager.func_cli_files_manager import preparing_for_work, help_reference
+import package_clt_files_manager as p_cli_fm
 operation={0: 'copy', 1: 'count', 2: 'delete',3: 'help', 4: 'test'}
 
 def parser_cli_file_manager():
@@ -16,28 +16,28 @@ def parser_cli_file_manager():
 
     if args.operation in operation.values():
         if args.operation == operation[3]:
-            print(help_reference(args.operation, args.name1))
+            print(p_cli_fm.help_reference(args.operation, args.name1))
 
         elif args.operation == operation[4]:
-            preparing_for_work()
+            p_cli_fm.preparing_for_work()
 
-        elif os.path.isdir(path_folder_test)==True:
-            if name_verification_for_None(args)==True:
+        elif os.path.isdir(p_cli_fm.path_folder_test):
+            if p_cli_fm.name_verification_for_None(args):
                 if args.operation == operation[0]:
-                    path_root_folder = find_folders_and_files(args.name1, None)
-                    path_folder_record = find_folders_and_files(args.name3, None)
+                    path_root_folder = p_cli_fm.find_folders_and_files(args.name1, None)
+                    path_folder_record = p_cli_fm.find_folders_and_files(args.name3, None)
                     if path_root_folder!=None and os.path.isdir(path_root_folder)==True:
                         if args.name2 in os.listdir(path_root_folder):
                             if path_folder_record !=None and os.path.isdir(path_folder_record)==True:
-                                copy_file(path_root_folder,args.name2,path_folder_record)
+                                p_cli_fm.copy_file(path_root_folder,args.name2,path_folder_record)
                             else:
                                 print(f'Невозможно выполнить копирование файла {args.name2}, папка записи {args.name3} не существует,'
-                                      f' либо находится за пределами {os.path.basename(path_folder_test)}.')
+                                      f' либо находится за пределами {os.path.basename(p_cli_fm.path_folder_test)}.')
                         else:
                             print(f'Невозможно выполнить копирование файла {args.name2}, файл отсутствует в папке {args.name1}.')
                     else:
                         print(f'Невозможно выполнить копирование файла {args.name2}, исходная папка {args.name1} не существует,'
-                              f' либо находится за пределами {os.path.basename(path_folder_test)}.')
+                              f' либо находится за пределами {os.path.basename(p_cli_fm.path_folder_test)}.')
             else:
                 print(f'Количество введенных аргументов команды {args.operation} не соответствует требуемому синтаксису.')
         else:
