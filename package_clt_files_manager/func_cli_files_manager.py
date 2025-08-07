@@ -77,6 +77,17 @@ def find_folders_and_files(folder_name, file_name):
         return None
 
 
+# функция определения корректного ввода аргументов команд
+def name_verification_for_None(args):
+    if args.operation=='copy' and args.name1 is not None and args.name2 is not None and args.name3 is not None:
+        return True
+    elif args.operation =='count' and args.name1 is not None:
+        return True
+    elif args.operation == 'delete' and args.name1 is not None:
+        return True
+    else:
+        return False
+
 # функция копирования фалов
 def copy_file(path_root_folder,file_name,path_folder_record):
     path_file_name = os.path.join(path_root_folder,file_name)
