@@ -1,10 +1,8 @@
 import shutil
 import os
-#from CLI_files_manager.parser_cli import path_folder_test
 
 # функция создания тестовой папки
 def preparing_for_work(path_folder):
-    print('!!!',path_folder)
 
     # пути для создания папок и файлов
     path_folder_test = os.path.join(path_folder, "folder_test")
@@ -121,7 +119,6 @@ def count_files_recursive(path_folder):
 
 # функция удаления папок и файлов
 def delete_folder_and_file(path_folder, file=None):
-    print('path_folder, file',path_folder, file)
     path_folder_test = os.path.join(editing_a_path(), "folder_test")
     if path_folder_test in path_folder:
         if file==None:
@@ -136,7 +133,6 @@ def delete_folder_and_file(path_folder, file=None):
             print(f'Папка {os.path.basename(path_folder)} удалена.')
     else:
         print(f'Невозможно выполнить удаление, так как объект не относится к директории {os.path.basename(path_folder_test)}.')
-
 
 
 def editing_a_path():
