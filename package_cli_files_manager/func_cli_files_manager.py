@@ -6,12 +6,10 @@ import os
 def preparing_for_work(path_folder):
     print('!!!',path_folder)
 
-
+    # пути для создания папок и файлов
     path_folder_test = os.path.join(path_folder, "folder_test")
     if "folder_test" not in os.listdir(path_folder):
         os.mkdir(path_folder_test)
-    # пути для создания папок и файлов, а так же их импорта
-    #path_folder_test = os.path.join(os.path.dirname(os.getcwd()), 'folder_test')
     path_test1 = os.path.join(path_folder_test, "test1.txt")
     path_test2 = os.path.join(path_folder_test, "test2.txt")
     path_folder_test2 = os.path.join(path_folder_test, "folder_test2")
@@ -119,6 +117,26 @@ def count_files_recursive(path_folder):
         elif os.path.isdir(item_path) and len(os.listdir(item_path)) != 0:
             total_files += count_files_recursive(item_path)
     return total_files
+
+
+# функция удаления папок и файлов
+def delete_folder_and_file(path_folder, file=None):
+    path_folder_test = os.path.join(os.getcwd(), "folder_test")
+    if path_folder_test in path_folder:
+        if file==None:
+            path_delete = path_folder
+        else:
+            path_delete = os.path.join(path_folder, file)
+        if os.path.isfile(path_delete):
+            os.remove(path_delete)
+            print(f'Файл {file} удален из папки {os.path.basename(path_folder)}.')
+        elif os.path.isdir(path_delete):
+            shutil.rmtree(path_delete) #os.rmdir(path_delete)
+            print(f'Папка {os.path.basename(path_folder)} удалена.')
+    else:
+        print(f'Невозможно выполнить удаление, так как объект не относится к директории {os.path.basename(path_folder_test)}.')
+
+
 
 def editing_a_path():
     path_folder_test = os.getcwd()
