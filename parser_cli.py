@@ -52,6 +52,20 @@ def parser_cli_file_manager():
                         print(f'Невозможно выполнить подсчет файлов в папке {args.name1}, папка {args.name1} не существует,'
                               f' либо находится за пределами {os.path.basename(path_folder_test)}.')
 
+                elif args.operation == operation[2]:
+                    path_folder= p_cli_fm.find_folders_and_files(args.name1, None)
+                    if path_folder != None and os.path.isdir(path_folder) == True:
+                        if args.name2 != None:
+                            if args.name2 in os.listdir(path_folder):
+                                 p_cli_fm.delete_folder_and_file(path_folder,args.name2)
+                            else:
+                                print(f'Невозможно выполнить удаление файла {args.name2}, файл отсутствует в папке'
+                                      f' {args.name1}, либо находится за пределами {os.path.basename(path_folder_test)}.')
+                        else:
+                            p_cli_fm.delete_folder_and_file(path_folder)
+                    else:
+                        print(f'Невозможно выполнить удаление папки, папка {args.name1} не существует, либо находится'
+                              f' за пределами {os.path.basename(path_folder_test)}.')
             else:
                 print(f'Количество введенных аргументов команды {args.operation} не соответствует требуемому синтаксису.')
         else:
