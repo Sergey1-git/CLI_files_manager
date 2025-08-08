@@ -1,6 +1,6 @@
 import unittest
 import os
-from func_cli_files_manager import preparing_for_work, count_files_recursive,find_folders_and_files
+from func_cli_files_manager import preparing_for_work, count_files_recursive,find_folders_and_files, editing_a_path
 #from CLI_files_manager.parser_cli import  path_folder_test
 class TestPreparing_for_work(unittest.TestCase):
     def test_preparing_for_work(self):
@@ -54,12 +54,3 @@ class TestCount_files_recursive(unittest.TestCase):
             total_files+=len(files)
         self.assertEqual(count_files_recursive(path_folder_test),total_files)
 
-
-def editing_a_path():
-    path_folder_test = os.getcwd()
-    if 'package_cli_files_manager' in path_folder_test:
-        folder_test = path_folder_test.replace('\\package_cli_files_manager', '')
-        return folder_test
-    else:
-        folder_test = path_folder_test
-        return folder_test
