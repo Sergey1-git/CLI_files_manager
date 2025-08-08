@@ -1,7 +1,7 @@
 import unittest
 import os
-from func_cli_files_manager import preparing_for_work, count_files_recursive,find_folders_and_files, editing_a_path
-#from CLI_files_manager.parser_cli import  path_folder_test
+from func_cli_files_manager import (preparing_for_work, count_files_recursive,find_folders_and_files, editing_a_path,
+                                    delete_folder_and_file)
 class TestPreparing_for_work(unittest.TestCase):
     def test_preparing_for_work(self):
         print('Проверка, что функция preparing_for_work создает папку folder_test.')
@@ -54,3 +54,16 @@ class TestCount_files_recursive(unittest.TestCase):
             total_files+=len(files)
         self.assertEqual(count_files_recursive(path_folder_test),total_files)
 
+
+class TestDelete_folder_and_file(unittest.TestCase):
+    def test_delete_folder(self):
+    # удаляемая папка folder_test3
+        print('Проверка, что функция delete_folder_and_file удаляет папку.')
+        path_folder = editing_a_path()
+        path_folder_test = os.path.join(path_folder, 'folder_test')
+        path_folder_test2 = os.path.join( path_folder_test, 'folder_test2')
+        path_folder_test3 = os.path.join(path_folder_test2, 'folder_test3')
+        if "folder_test3" not in os.listdir(path_folder_test2):
+            os.mkdir(path_folder_test3)
+        print('os.listdir',os.listdir(path_folder_test2))
+        self.assertNotIn('folder_test3', os.listdir(path_folder_test2))

@@ -121,7 +121,8 @@ def count_files_recursive(path_folder):
 
 # функция удаления папок и файлов
 def delete_folder_and_file(path_folder, file=None):
-    path_folder_test = os.path.join(os.getcwd(), "folder_test")
+    print('path_folder, file',path_folder, file)
+    path_folder_test = os.path.join(editing_a_path(), "folder_test")
     if path_folder_test in path_folder:
         if file==None:
             path_delete = path_folder
