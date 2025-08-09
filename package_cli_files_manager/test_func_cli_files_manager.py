@@ -25,7 +25,7 @@ class TestFindFoldersAndFiles(unittest.TestCase):
         self.assertEqual(find_folders_and_files(folder_name, file_name), path_folder_test)
 
 
-    def test_find_folders_None(self):
+    def test_find_folders_none(self):
         print('Проверка, что функция find_folders_and_files возвращает None при отсутствии папки.')
         folder_name = 'folder_test4'
         file_name = None
@@ -41,7 +41,7 @@ class TestFindFoldersAndFiles(unittest.TestCase):
         self.assertEqual(find_folders_and_files(folder_name,file_name),path_test1)
 
 
-    def test_find_file_None(self):
+    def test_find_file_none(self):
         print('Проверка,что функция find_folders_and_files возвращает None при отсутствии файла.')
         folder_name = 'folder_test3'
         file_name = 'test4.txt'
