@@ -1,4 +1,4 @@
-import shutil
+from shutil import rmtree, copy
 import os
 
 # функция создания тестовой папки
@@ -31,24 +31,29 @@ def preparing_for_work(path_folder):
         os.mkdir(path_folder_test3)
 
 # функция справочной системы
-def help_reference(name1, name2=None):
+def help_reference(name2=None):
     comande_dict = {
-        'copy': 'ввод команды copy - "copy" "наименование исходной папки", "наименование копируемого файла", "наименование папки записи"',
+        'copy': 'ввод команды copy - "copy" "наименование исходной папки", "наименование копируемого файла",'
+                ' "наименование папки записи"',
         'count': 'ввод команды count - "count" "наименование исходной папки',
-        'delete': 'ввод команды delete - "delete" "наименование удаляемой папки", либо "delete" "наименование исходной папки", "наименование удаляемого файла"',
+        'delete': 'ввод команды delete - "delete" "наименование удаляемой папки", либо "delete" "наименование исходной'
+                  ' папки", "наименование удаляемого файла"',
         'help': 'ввод команды help - "help" "наименование команды"', 'test': 'ввод команды test - "test"'}
-    if name2==None:
-        string=('Команды используемые при работе с CLI_files_manager:\n"help"- выводит справочную информацию.\n"copy"- осуществляет копирование файлов.\n'+
+    if name2 is None:
+        string=('Команды используемые при работе с CLI_files_manager:\n"help"- выводит справочную информацию.\n"copy"-'
+                ' осуществляет копирование файлов.\n'+
                 '"test"- создает либо восстанавливает тестовую папку folder_test.\n'+
                 '"count"- подсчитывает колличество файлов в указанной папке, включая папки вложенные.\n' +
-                '"delete"- удаляет указанный файл или папку.\nБолее подробную информацию по конкретной команде можно получить выполнив "help" "наменование команды".\n' +
+                '"delete"- удаляет указанный файл или папку.\nБолее подробную информацию по конкретной команде'
+                ' можно получить выполнив "help" "наменование команды".\n' +
                 'Перед использованием CLI_files_manager необходимо создать тестовую папку с помощью команды "test".\n')
         return string
     else:
         if name2 in comande_dict.keys():
             return comande_dict[name2]
         else:
-            string=f'Ведённая команда {name2} не является командой CLI_files_manager. Поддерживаемые команды "copy, count, delete, help"'
+            string=(f'Ведённая команда {name2} не является командой CLI_files_manager. Поддерживаемые команды'
+                    f' "copy, count, delete, help"')
             return string
 
 # функция определения путей папок и файлов
@@ -64,9 +69,9 @@ def find_folders_and_files(folder_name, file_name):
                 if file_name in os.listdir(path_folder):
                     path_file_name = os.path.join(path_folder, file_name)
                     list_path.append(path_file_name)
-    if len(list_path)==1:
+    if len(list_path) == 1:
         return list_path[0]
-    elif len(list_path)>1:
+    elif len(list_path) > 1:
         print('Найдено несколько подходящих объектов.', *list_path)
         while True:
             path=input('Ведите необходимый вам путь ')
@@ -79,7 +84,7 @@ def find_folders_and_files(folder_name, file_name):
 
 
 # функция определения корректного ввода аргументов команд
-def name_verification_for_None(args):
+def name_verification_for_none(args):
     if args.operation=='copy' and args.name1 is not None and args.name2 is not None and args.name3 is not None:
         return True
     elif args.operation =='count' and args.name1 is not None:
@@ -96,12 +101,12 @@ def copy_file(path_root_folder,file_name,path_folder_record):
     if path_file_name_copy == path_file_name:
         name = file_name
         name_parts = name.partition(".")
-        name = f'{name_parts[0] + '_копия'}{name_parts[1]}{name_parts[2]}'
+        name = f'{name_parts[0]}_копия{name_parts[1]}{name_parts[2]}'
         path_file_name_copy = os.path.join(path_folder_record, name)
-        shutil.copy(path_file_name, path_file_name_copy)
+        copy(path_file_name, path_file_name_copy)
         print(f"Файл {file_name} успешно скопирован в папку {os.path.basename(path_root_folder)} как {name}.")
     else:
-        shutil.copy(path_file_name, path_file_name_copy)
+        copy(path_file_name, path_file_name_copy)
         print(f"Файл {file_name} успешно скопирован в папку {os.path.basename(path_folder_record)}.")
 
 
@@ -118,10 +123,10 @@ def count_files_recursive(path_folder):
 
 
 # функция удаления папок и файлов
-def delete_folder_and_file(path_folder, file=None):
+def delete_folder_and_file(path_folder, file = None):
     path_folder_test = os.path.join(editing_a_path(), "folder_test")
     if path_folder_test in path_folder:
-        if file==None:
+        if file is None:
             path_delete = path_folder
         else:
             path_delete = os.path.join(path_folder, file)
@@ -129,7 +134,7 @@ def delete_folder_and_file(path_folder, file=None):
             os.remove(path_delete)
             print(f'Файл {file} удален из папки {os.path.basename(path_folder)}.')
         elif os.path.isdir(path_delete):
-            shutil.rmtree(path_delete) #os.rmdir(path_delete)
+            rmtree(path_delete) #os.rmdir(path_delete)
             print(f'Папка {os.path.basename(path_folder)} удалена.')
     else:
         print(f'Невозможно выполнить удаление, так как объект не относится к директории {os.path.basename(path_folder_test)}.')
