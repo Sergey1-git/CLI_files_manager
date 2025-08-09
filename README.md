@@ -47,6 +47,7 @@ test_func_cli_files_manager находящегося в другой дерик�
 4. Test_func_cli_files_manager - в файле находятся тесты работы func_cli_files_manager.
 5. .gitignor
 6. README
+
 Файлы func_cli_files_manager и test_func_cli_files_manager упакованы в package_cli_files_manager.
 
 

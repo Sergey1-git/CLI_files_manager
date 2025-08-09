@@ -18,8 +18,10 @@ def parser_cli_file_manager():
 
     path_folder = os.getcwd()
     if args.operation in operation.values():
+
         if args.operation == operation[3]:
             print(p_cli_fm.help_reference(args.name1))
+
         elif args.operation == operation[4]:
             p_cli_fm.preparing_for_work(path_folder)
 
