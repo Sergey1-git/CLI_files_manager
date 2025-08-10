@@ -46,7 +46,7 @@ class TestFindFoldersAndFiles(unittest.TestCase):
         file_name = 'test4.txt'
         self.assertIsNone(find_folders_and_files(folder_name, file_name))
 
-class TestCopy_file(unittest.TestCase):
+class TestCopyfile(unittest.TestCase):
     def test_copy_file(self):
     # 1 исходная папка 'folder_test' копирование в папку 'folder_test'
     # 2 исходная папка 'folder_test' копирование в папку 'folder_test2'

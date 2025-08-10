@@ -1,5 +1,6 @@
 from shutil import rmtree, copy
 import os
+import re
 
 # функция создания тестовой папки
 def preparing_for_work(path_folder):
@@ -138,6 +139,28 @@ def delete_folder_and_file(path_folder, file = None):
             print(f'Папка {os.path.basename(path_folder)} удалена.')
     else:
         print(f'Невозможно выполнить удаление, так как объект не относится к директории {os.path.basename(path_folder_test)}.')
+
+def search_files_by_criteria(path_folder, pattern, size1=None,size2=None):
+    dict={}
+    for root, dirs, files in os.walk(path_folder):
+        lf = []
+        for file in files:
+            if re.search(pattern, file) and size1 is None:
+                lf.append(file)
+            elif re.search(pattern, file) and size2 is None and os.path.getsize(os.path.join(root, file)) >= int(size1):
+                    lf.append(file)
+            elif re.search(pattern, file) and size2 is not None and int(size1)<=os.path.getsize(os.path.join(root,file))<=int(size2):
+                lf.append(file)
+        if len(lf)!=0:
+            dict[root]=lf
+    if len(dict) == 0:
+        print('Файлы подпадающие под выбранные условия не найдены')
+    else:
+
+        print('Файлы подпадающие под выбранные условия расположены в следующих папках:')
+        for i in dict:
+            txt = ','.join(dict[i])
+            print(f'Папка {os.path.basename(i)} файлы: {txt}')
 
 
 def editing_a_path():

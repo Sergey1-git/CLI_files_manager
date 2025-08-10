@@ -70,6 +70,7 @@ class TestParserCLI(unittest.TestCase):
         cli_result=text.decode('utf-8')
         self.assertEqual(f"Количество файлов в папке folder_test равно {total_files}.\n" , cli_result)
 
+
     def test_operation_count_false(self):
         print('Проверка, что при вводе ошибочных параметров команды count выводятся соответствующие уведомления.')
         test_cases = [
@@ -86,6 +87,7 @@ class TestParserCLI(unittest.TestCase):
                 cli_result = text.decode('utf-8')
                 self.assertEqual(result, cli_result)
 
+
     def test_operation_delete(self):
         print('Проверка, что при правильном вводе команды delete выводятся соответствующий результат.')
         path_folder_test2 = os.path.join(path_folder_test, 'folder_test2')
@@ -96,6 +98,7 @@ class TestParserCLI(unittest.TestCase):
         text=cli_result.stdout.encode('windows-1251')
         cli_result=text.decode('utf-8')
         self.assertEqual('Файл test4.txt удален из папки folder_test2.\n', cli_result)
+
 
     def test_operation_delete_false(self):
         print('Проверка, что при вводе ошибочных параметров команды delete выводятся соответствующие уведомления.')
