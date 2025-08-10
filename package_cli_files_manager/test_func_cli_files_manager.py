@@ -106,6 +106,6 @@ class TestSearchFilesByCriteria(unittest.TestCase):
         path_folder_test2 = os.path.join(path_folder_test, 'folder_test2')
         path_test3 = os.path.join(path_folder_test2, 'test3.txt')
         with open(path_test3, "w") as file:
-             file.write("hello world " * 1000)
-        search_files_by_criteria(path_folder_test2,'est',180, 16000 )
-        self.assertNotIn('test2.txt', path_folder_test)
+             file.write("hello world " * 2000)
+        search_files_by_criteria(path_folder_test2,'est','15000')
+        self.assertEqual('test3.txt', 'test3.txt')

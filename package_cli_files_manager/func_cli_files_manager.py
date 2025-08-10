@@ -92,6 +92,8 @@ def name_verification_for_none(args):
         return True
     elif args.operation == 'delete' and args.name1 is not None:
         return True
+    elif args.operation == 'findfile' and args.name1 is not None and args.name2 is not None:
+        return True
     else:
         return False
 
@@ -147,10 +149,12 @@ def search_files_by_criteria(path_folder, pattern, size1=None,size2=None):
         for file in files:
             if re.search(pattern, file) and size1 is None:
                 lf.append(file)
-            elif re.search(pattern, file) and size2 is None and os.path.getsize(os.path.join(root, file)) >= int(size1):
+            elif re.search(pattern, file) and size1 is not None and size2 is None:
+                if os.path.getsize(os.path.join(root, file)) >= int(size1):
                     lf.append(file)
-            elif re.search(pattern, file) and size2 is not None and int(size1)<=os.path.getsize(os.path.join(root,file))<=int(size2):
-                lf.append(file)
+            elif re.search(pattern, file) and size1 is not None and size2 is not None:
+                if int(size1)<=os.path.getsize(os.path.join(root,file))<=int(size2):
+                    lf.append(file)
         if len(lf)!=0:
             dict[root]=lf
     if len(dict) == 0:

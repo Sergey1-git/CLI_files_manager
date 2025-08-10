@@ -125,3 +125,15 @@ class TestParserCLI(unittest.TestCase):
                 text = cli_result.stdout.encode('windows-1251')
                 cli_result = text.decode('utf-8')
                 self.assertEqual(result, cli_result)
+
+
+    def test_search_files_by_criteria(self):
+        print('Проверка, что при правильном вводе команды findfile выводятся соответствующий результат.')
+        path_folder_test2 = os.path.join(path_folder_test, "folder_test2")
+        path_test3=os.path.join(path_folder_test2, "test3.txt")
+        with open(path_test3, "w") as file:
+            file.write("hello world " * 2000)
+        cli_result = subprocess.run([sys.executable, 'parser_cli.py', 'findfile', 'folder_test2', 'est', '15000','25000'], capture_output=True, text=True)
+        text = cli_result.stdout.encode('windows-1251')
+        cli_result = text.decode('utf-8')
+        self.assertEqual('Файлы подпадающие под выбранные условия расположены в следующих папках:\n''Папка folder_test2 файлы: test3.txt\n' , cli_result)
