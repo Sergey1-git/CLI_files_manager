@@ -157,7 +157,7 @@ def search_files_by_criteria(path_folder, pattern, size1=None,size2=None):
                     lf.append(file)
         if len(lf)!=0:
             dict_file[root]=lf
-    if len(dict) == 0:
+    if len(dict_file) == 0:
         print('Файлы подпадающие под выбранные условия не найдены.')
     else:
 
