@@ -114,13 +114,13 @@ class TestParserCLI(unittest.TestCase):
             with self.subTest(expression = expression):
                 if expression is not None:
                     if  isinstance(expression, list):
-                        cli_result = subprocess.run([sys.executable, 'parser_CLI.py', 'delete', *expression],
+                        cli_result = subprocess.run([sys.executable, 'parser_cli.py', 'delete', *expression],
                                                     capture_output = True, text = True)
                     else:
-                        cli_result = subprocess.run([sys.executable, 'parser_CLI.py', 'delete', expression],
+                        cli_result = subprocess.run([sys.executable, 'parser_cli.py', 'delete', expression],
                                                     capture_output = True, text = True)
                 else:
-                    cli_result = subprocess.run([sys.executable, 'parser_CLI.py', 'delete'], capture_output=True,
+                    cli_result = subprocess.run([sys.executable, 'parser_cli.py', 'delete'], capture_output=True,
                                                     text=True)
                 text = cli_result.stdout.encode('windows-1251')
                 cli_result = text.decode('utf-8')
@@ -133,7 +133,36 @@ class TestParserCLI(unittest.TestCase):
         path_test3=os.path.join(path_folder_test2, "test3.txt")
         with open(path_test3, "w") as file:
             file.write("hello world " * 2000)
-        cli_result = subprocess.run([sys.executable, 'parser_cli.py', 'findfile', 'folder_test2', 'est', '15000','25000'], capture_output=True, text=True)
-        text = cli_result.stdout.encode('windows-1251')
-        cli_result = text.decode('utf-8')
-        self.assertEqual('Файлы подпадающие под выбранные условия расположены в следующих папках:\n''Папка folder_test2 файлы: test3.txt\n' , cli_result)
+        test_cases = [
+            (['folder_test2', 'est', '15000','25000'],
+             'Файлы подпадающие под выбранные условия расположены в следующих папках:\n''Папка folder_test2 файлы: test3.txt\n'),
+            (['folder_test2', 'des'],
+             'Файлы подпадающие под выбранные условия не найдены.\n'),
+            (['folder_test2', 'est','25000'], 'Файлы подпадающие под выбранные условия не найдены.\n')
+        ]
+        for expression, result in test_cases:
+            with self.subTest(expression=expression):
+                cli_result = subprocess.run([sys.executable, 'parser_cli.py', 'findfile', *expression], capture_output=True, text=True)
+                text = cli_result.stdout.encode('windows-1251')
+                cli_result = text.decode('utf-8')
+                self.assertEqual(result, cli_result)
+
+    def test_search_files_by_criteria_false(self):
+        print('Проверка, что при вводе ошибочных параметров команды findfile выводятся соответствующие уведомления.')
+        test_cases = [
+            (['folder_test10', 'est'],
+                'Невозможно выполнить поиск, исходная папка folder_test10 не существует,'
+                ' либо находится за пределами папки folder_test.\n'),
+            (None, 'Количество введенных аргументов команды findfile не соответствует требуемому синтаксису.\n')
+        ]
+        for expression, result in test_cases:
+            with self.subTest(expression = expression):
+                if expression is not None:
+                    cli_result = subprocess.run([sys.executable, 'parser_cli.py', 'findfile', *expression],
+                                                capture_output = True, text = True)
+                else:
+                    cli_result = subprocess.run([sys.executable, 'parser_CLI.py', 'findfile'], capture_output=True,
+                                                    text=True)
+                text = cli_result.stdout.encode('windows-1251')
+                cli_result = text.decode('utf-8')
+                self.assertEqual(result, cli_result)

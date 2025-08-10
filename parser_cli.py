@@ -74,13 +74,10 @@ def parser_cli_file_manager():
                     path_folder = p_cli_fm.find_folders_and_files(args.name1, None)
                     if path_folder is not None and os.path.isdir(path_folder) == True:
                         if args.name3 is None:
-                            #print('1')
                             p_cli_fm.search_files_by_criteria(path_folder, args.name2)
                         elif args.name4 is None:
-                            #print('2')
                             p_cli_fm.search_files_by_criteria(path_folder, args.name2,  args.name3)
                         else:
-                            #print('3')
                             p_cli_fm.search_files_by_criteria(path_folder, args.name2, args.name3,args.name4)
                     else:
                         print(f'Невозможно выполнить поиск, исходная папка {args.name1} не существует,'

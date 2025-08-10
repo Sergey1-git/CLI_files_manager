@@ -147,7 +147,7 @@ def search_files_by_criteria(path_folder, pattern, size1=None,size2=None):
     for root, dirs, files in os.walk(path_folder):
         lf = []
         for file in files:
-            if re.search(pattern, file) and size1 is None:
+            if re.search(pattern, file) and size1 is None and size2 is None:
                 lf.append(file)
             elif re.search(pattern, file) and size1 is not None and size2 is None:
                 if os.path.getsize(os.path.join(root, file)) >= int(size1):
@@ -158,7 +158,7 @@ def search_files_by_criteria(path_folder, pattern, size1=None,size2=None):
         if len(lf)!=0:
             dict[root]=lf
     if len(dict) == 0:
-        print('Файлы подпадающие под выбранные условия не найдены')
+        print('Файлы подпадающие под выбранные условия не найдены.')
     else:
 
         print('Файлы подпадающие под выбранные условия расположены в следующих папках:')
