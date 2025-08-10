@@ -3,9 +3,7 @@ import os
 from func_cli_files_manager import (preparing_for_work, count_files_recursive,find_folders_and_files, editing_a_path,
                                     delete_folder_and_file, copy_file, search_files_by_criteria)
 
-
 class TestPreparingForWork(unittest.TestCase):
-
 
     def test_preparing_for_work(self):
         print('Проверка, что функция preparing_for_work создает папку folder_test.')

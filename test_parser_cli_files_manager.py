@@ -3,7 +3,7 @@ import subprocess
 import sys
 import os
 from parser_cli import operation,path_folder_test
-operation_test = {0: 'copy', 1: 'count', 2: 'delete', 3: 'help', 4: 'test'}
+operation_test = {0: 'copy', 1: 'count', 2: 'delete', 3: 'help', 4: 'test', 5:'findfile'}
 
 
 class TestParserCLI(unittest.TestCase):
@@ -65,7 +65,8 @@ class TestParserCLI(unittest.TestCase):
         total_files = 0
         for root, dirs, files in os.walk(path_folder_test):
             total_files += len(files)
-        cli_result = subprocess.run([sys.executable, 'parser_CLI.py', 'count', 'folder_test'], capture_output=True, text=True)
+        cli_result = subprocess.run([sys.executable, 'parser_CLI.py', 'count', 'folder_test'],
+                                    capture_output=True, text=True)
         text=cli_result.stdout.encode('windows-1251')
         cli_result=text.decode('utf-8')
         self.assertEqual(f"Количество файлов в папке folder_test равно {total_files}.\n" , cli_result)
@@ -81,8 +82,10 @@ class TestParserCLI(unittest.TestCase):
         for expression, result in test_cases:
             with self.subTest(expression=expression):
                 if expression is not None:
-                    cli_result = subprocess.run([sys.executable, 'parser_CLI.py', 'count', expression], capture_output=True, text=True)
-                else: cli_result = subprocess.run([sys.executable, 'parser_CLI.py', 'count'], capture_output=True, text=True)
+                    cli_result = subprocess.run([sys.executable, 'parser_CLI.py', 'count', expression],
+                                                capture_output=True, text=True)
+                else: cli_result = subprocess.run([sys.executable, 'parser_CLI.py', 'count'],
+                                                  capture_output=True, text=True)
                 text = cli_result.stdout.encode('windows-1251')
                 cli_result = text.decode('utf-8')
                 self.assertEqual(result, cli_result)
@@ -94,7 +97,8 @@ class TestParserCLI(unittest.TestCase):
         path_test4 = os.path.join(path_folder_test2, 'test4.txt')
         with open(path_test4, "w") as file:
             file.write("hello world " * 100)
-        cli_result = subprocess.run([sys.executable, 'parser_CLI.py', 'delete', 'folder_test2', 'test4.txt'], capture_output=True, text=True)
+        cli_result = subprocess.run([sys.executable, 'parser_CLI.py', 'delete', 'folder_test2', 'test4.txt'],
+                                    capture_output=True, text=True)
         text=cli_result.stdout.encode('windows-1251')
         cli_result=text.decode('utf-8')
         self.assertEqual('Файл test4.txt удален из папки folder_test2.\n', cli_result)
@@ -142,7 +146,8 @@ class TestParserCLI(unittest.TestCase):
         ]
         for expression, result in test_cases:
             with self.subTest(expression=expression):
-                cli_result = subprocess.run([sys.executable, 'parser_cli.py', 'findfile', *expression], capture_output=True, text=True)
+                cli_result = subprocess.run([sys.executable, 'parser_cli.py', 'findfile', *expression],
+                                            capture_output=True, text=True)
                 text = cli_result.stdout.encode('windows-1251')
                 cli_result = text.decode('utf-8')
                 self.assertEqual(result, cli_result)

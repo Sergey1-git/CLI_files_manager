@@ -143,7 +143,7 @@ def delete_folder_and_file(path_folder, file = None):
         print(f'Невозможно выполнить удаление, так как объект не относится к директории {os.path.basename(path_folder_test)}.')
 
 def search_files_by_criteria(path_folder, pattern, size1=None,size2=None):
-    dict={}
+    dict_file={}
     for root, dirs, files in os.walk(path_folder):
         lf = []
         for file in files:
@@ -156,14 +156,14 @@ def search_files_by_criteria(path_folder, pattern, size1=None,size2=None):
                 if int(size1)<=os.path.getsize(os.path.join(root,file))<=int(size2):
                     lf.append(file)
         if len(lf)!=0:
-            dict[root]=lf
+            dict_file[root]=lf
     if len(dict) == 0:
         print('Файлы подпадающие под выбранные условия не найдены.')
     else:
 
         print('Файлы подпадающие под выбранные условия расположены в следующих папках:')
-        for i in dict:
-            txt = ','.join(dict[i])
+        for i in dict_file:
+            txt = ','.join(dict_file[i])
             print(f'Папка {os.path.basename(i)} файлы: {txt}')
 
 
