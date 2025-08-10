@@ -1,7 +1,7 @@
 import unittest
 import os
 from func_cli_files_manager import (preparing_for_work, count_files_recursive,find_folders_and_files, editing_a_path,
-                                    delete_folder_and_file, copy_file)
+                                    delete_folder_and_file, copy_file, search_files_by_criteria)
 
 
 class TestPreparingForWork(unittest.TestCase):
@@ -94,4 +94,18 @@ class TestDeleteFolderAndFile(unittest.TestCase):
         with open(path_test2, "w") as file:
              file.write("hello world " * 10)
         delete_folder_and_file(path_folder_test,'test2.txt')
+        self.assertNotIn('test2.txt', path_folder_test)
+
+
+class TestSearchFilesByCriteria(unittest.TestCase):
+
+    def test_search_files_by_criteria(self):
+    # ищем  файл test3.txt в папке folder_test2
+        print('Проверка, что функция search_files_by_criteria находит файл по параметрам.')
+        path_folder_test = os.path.join(editing_a_path(), 'folder_test')
+        path_folder_test2 = os.path.join(path_folder_test, 'folder_test2')
+        path_test3 = os.path.join(path_folder_test2, 'test3.txt')
+        with open(path_test3, "w") as file:
+             file.write("hello world " * 1000)
+        search_files_by_criteria(path_folder_test2,'est',180, 16000 )
         self.assertNotIn('test2.txt', path_folder_test)
