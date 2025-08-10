@@ -1,7 +1,7 @@
 import unittest
 import os
 from func_cli_files_manager import (preparing_for_work, count_files_recursive,find_folders_and_files, editing_a_path,
-                                    delete_folder_and_file)
+                                    delete_folder_and_file, copy_file)
 
 
 class TestPreparingForWork(unittest.TestCase):
@@ -15,7 +15,6 @@ class TestPreparingForWork(unittest.TestCase):
 
 
 class TestFindFoldersAndFiles(unittest.TestCase):
-
 
     def test_find_folders(self):
         print('Проверка, что функция find_folders_and_files определяет пути папок.')
@@ -47,6 +46,17 @@ class TestFindFoldersAndFiles(unittest.TestCase):
         file_name = 'test4.txt'
         self.assertIsNone(find_folders_and_files(folder_name, file_name))
 
+class TestCopy_file(unittest.TestCase):
+    def test_copy_file(self):
+    # 1 исходная папка 'folder_test' копирование в папку 'folder_test'
+    # 2 исходная папка 'folder_test' копирование в папку 'folder_test2'
+        print('Проверка, что функция copy_file создает копию файла.')
+        file_name = 'test1.txt'
+        path_folder_test = os.path.join(editing_a_path(), 'folder_test')
+        path_folder_test2 = os.path.join(path_folder_test, 'folder_test2')
+        copy_file(path_folder_test, file_name, path_folder_test)
+        copy_file(path_folder_test, file_name,path_folder_test2)
+        self.assertIn(file_name,path_folder_test and file_name,path_folder_test2)
 
 class TestCountfilesRecursive(unittest.TestCase):
 

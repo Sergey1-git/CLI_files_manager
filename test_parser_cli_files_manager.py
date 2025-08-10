@@ -87,7 +87,7 @@ class TestParserCLI(unittest.TestCase):
                 self.assertEqual(result, cli_result)
 
     def test_operation_delete(self):
-        print('Проверка, что при вводе ошибочных параметров команды delete выводятся соответствующий результат.')
+        print('Проверка, что при правильном вводе команды delete выводятся соответствующий результат.')
         path_folder_test2 = os.path.join(path_folder_test, 'folder_test2')
         path_test4 = os.path.join(path_folder_test2, 'test4.txt')
         with open(path_test4, "w") as file:
