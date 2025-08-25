@@ -25,17 +25,15 @@ class TestParserCLI(unittest.TestCase):
             with self.subTest(expression=expression):
                 cli_result = subprocess.run([sys.executable, 'parser_CLI.py', expression],
                                             capture_output=True, text=True)
-                text = cli_result.stdout.encode('windows-1251')
-                cli_result = text.decode('utf-8')
-                self.assertEqual(result, cli_result)
+                self.assertEqual(result, cli_result.stdout)
 
     def test_operation_copy(self):
         print('Проверка, что при правильном вводе команды copy выводятся соответствующий результат.')
         cli_result = subprocess.run([sys.executable, 'parser_CLI.py', 'copy', 'folder_test', 'test1.txt',
                                      'folder_test2' ],capture_output=True, text=True)
-        text=cli_result.stdout.encode('windows-1251')
-        cli_result=text.decode('utf-8')
-        self.assertEqual('Файл test1.txt успешно скопирован в папку folder_test2.\n' , cli_result)
+        #text=cli_result.stdout.encode('windows-1251')
+        #cli_result=text.decode('utf-8')
+        self.assertEqual('Файл test1.txt успешно скопирован в папку folder_test2.\n' , cli_result.stdout)
 
     def test_operation_copy_false(self):
         print('Проверка, что при вводе ошибочных параметров команды copy выводятся соответствующие уведомления.')
@@ -55,9 +53,7 @@ class TestParserCLI(unittest.TestCase):
                 else:
                     cli_result = subprocess.run([sys.executable, 'parser_CLI.py', 'copy'], capture_output=True,
                                                 text=True)
-                text = cli_result.stdout.encode('windows-1251')
-                cli_result = text.decode('utf-8')
-                self.assertEqual(result, cli_result)
+                self.assertEqual(result, cli_result.stdout)
 
 
     def test_operation_count(self):
@@ -67,9 +63,7 @@ class TestParserCLI(unittest.TestCase):
             total_files += len(files)
         cli_result = subprocess.run([sys.executable, 'parser_CLI.py', 'count', 'folder_test'],
                                     capture_output=True, text=True)
-        text=cli_result.stdout.encode('windows-1251')
-        cli_result=text.decode('utf-8')
-        self.assertEqual(f"Количество файлов в папке folder_test равно {total_files}.\n" , cli_result)
+        self.assertEqual(f"Количество файлов в папке folder_test равно {total_files}.\n" , cli_result.stdout)
 
 
     def test_operation_count_false(self):
@@ -86,9 +80,7 @@ class TestParserCLI(unittest.TestCase):
                                                 capture_output=True, text=True)
                 else: cli_result = subprocess.run([sys.executable, 'parser_CLI.py', 'count'],
                                                   capture_output=True, text=True)
-                text = cli_result.stdout.encode('windows-1251')
-                cli_result = text.decode('utf-8')
-                self.assertEqual(result, cli_result)
+                self.assertEqual(result, cli_result.stdout)
 
 
     def test_operation_delete(self):
@@ -99,9 +91,7 @@ class TestParserCLI(unittest.TestCase):
             file.write("hello world " * 100)
         cli_result = subprocess.run([sys.executable, 'parser_CLI.py', 'delete', 'folder_test2', 'test4.txt'],
                                     capture_output=True, text=True)
-        text=cli_result.stdout.encode('windows-1251')
-        cli_result=text.decode('utf-8')
-        self.assertEqual('Файл test4.txt удален из папки folder_test2.\n', cli_result)
+        self.assertEqual('Файл test4.txt удален из папки folder_test2.\n', cli_result.stdout)
 
 
     def test_operation_delete_false(self):
@@ -126,9 +116,7 @@ class TestParserCLI(unittest.TestCase):
                 else:
                     cli_result = subprocess.run([sys.executable, 'parser_cli.py', 'delete'], capture_output=True,
                                                     text=True)
-                text = cli_result.stdout.encode('windows-1251')
-                cli_result = text.decode('utf-8')
-                self.assertEqual(result, cli_result)
+                self.assertEqual(result, cli_result.stdout)
 
 
     def test_search_files_by_criteria(self):
@@ -148,9 +136,7 @@ class TestParserCLI(unittest.TestCase):
             with self.subTest(expression=expression):
                 cli_result = subprocess.run([sys.executable, 'parser_cli.py', 'findfile', *expression],
                                             capture_output=True, text=True)
-                text = cli_result.stdout.encode('windows-1251')
-                cli_result = text.decode('utf-8')
-                self.assertEqual(result, cli_result)
+                self.assertEqual(result, cli_result.stdout)
 
     def test_search_files_by_criteria_false(self):
         print('Проверка, что при вводе ошибочных параметров команды findfile выводятся соответствующие уведомления.')
@@ -168,6 +154,4 @@ class TestParserCLI(unittest.TestCase):
                 else:
                     cli_result = subprocess.run([sys.executable, 'parser_CLI.py', 'findfile'], capture_output=True,
                                                     text=True)
-                text = cli_result.stdout.encode('windows-1251')
-                cli_result = text.decode('utf-8')
-                self.assertEqual(result, cli_result)
+                self.assertEqual(result, cli_result.stdout)
