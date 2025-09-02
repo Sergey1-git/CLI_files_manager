@@ -48,11 +48,9 @@ python parser_cli.py delete folder_test test2.txt.
 необходимые аргументы в формате "исходная папка поиска", "имя файла (или его часть)"
 либо "исходная папка поиска", "имя файла (или его часть)", "размер файла".
 Пример ввода в терминале команды для поиска файла test3.txt:
-python parser_cli.py findfile test3.txt.
+python parser_cli.py findfile  folder_test test3.txt.
 Пример ввода в терминале команды для поиска файла по части его наименования "est":
-python parser_cli.py findfile est.
-Пример ввода в терминале команды для поиска файла по части его наименования "est" c указанием папки поиска folder_test2:
-python parser_cli.py findfile folder_test2 est.
+python parser_cli.py findfile  folder_test est.
 Пример ввода в терминале команды для поиска файла по части его наименования "est" и размера файла до 1800 байт включительно c указанием папки поиска folder_test:
 python parser_cli.py findfile folder_test2 est 1800.
 Пример ввода в терминале команды для поиска файла по части его наименования "est" и размера файла от 1800  до 25000 байт включительно c указанием папки поиска folder_test:
