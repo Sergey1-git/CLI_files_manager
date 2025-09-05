@@ -15,7 +15,7 @@ def preparing_for_work(path_folder):
     path_test3 = os.path.join(path_folder_test2, "test3.txt")
     path_test4 = os.path.join(path_folder_test2, "test4.txt")
     path_folder_test3 = os.path.join(path_folder_test2, "folder_test3")
-    print('Подготовка к работе, создание папки для тестирования.')
+    #print('Подготовка к работе, создание папки для тестирования.')
 
     with open(path_test1, "w") as file:
         file.write("hello world " * 10)
