@@ -12,6 +12,7 @@ def main(page: ft.Page):
     my_copy_ref = ft.Ref[ft.Text]()
     my_copy_path_ref = ft.Ref[ft.Text]()
     my_count_ref = ft.Ref[ft.Text]()
+    my_delete_path_ref = ft.Ref[ft.Text]()
 
 
     def handle_menu_item_click(e):
@@ -30,6 +31,9 @@ def main(page: ft.Page):
             if e.control.content.value=="Выбор папки" and  current_dialog[0]=='dlg_count':
                 my_count_ref.current.value = ''
                 dlg_count.update()
+            if e.control.content.value=="Выбор файла" and  current_dialog[0]=='dlg_delete_file':
+                my_delete_path_ref.current.value = ''
+                dlg_delete_file.update()
 
         page.update()
 
@@ -43,6 +47,9 @@ def main(page: ft.Page):
         if current_dialog[0]=='dlg_copy':
             my_copy_path_ref.current.value=e.files[0].path if e.files else ""
             my_copy_path_ref.current.update()
+        if current_dialog[0]=='dlg_delete_file':
+            my_delete_path_ref.current.value=e.files[0].path if e.files else ""
+            my_delete_path_ref.current.update()
 
 
     pick_files_dialog = ft.FilePicker(on_result=pick_files_result)
@@ -73,6 +80,9 @@ def main(page: ft.Page):
         if active_dialog=='dlg_count':
             my_count_ref.current.value=''
             dlg_count.update()
+        if active_dialog=='dlg_delete_file':
+            my_delete_path_ref.current.value=''
+            dlg_delete_file.update()
         if selected_files.value!='':
             selected_files.value = ''
             selected_files.update()
@@ -266,6 +276,15 @@ def main(page: ft.Page):
             my_count_ref.current.value = str(f"Количество файлов равно {p_cli_fm.count_files_recursive(path_folder_count)}.")
         dlg_count.update()
 
+    def delete_file_result(file_name, path_file):
+        path_folder_file=os.path.split(path_file)[0]
+        if file_name == "Не выбрано" or file_name == "":
+            my_delete_path_ref.current.value = f"Не выбран файл, повторите выбор"
+        else:
+            p_cli_fm.delete_folder_and_file(path_folder_file, file_name)
+            my_delete_path_ref.current.value = f"Файл {file_name} успешно удален."
+        dlg_delete_file.update()
+
 
     dlg_test = ft.AlertDialog(
         modal=True,
@@ -305,6 +324,19 @@ def main(page: ft.Page):
             ft.Row([ft.TextButton("Выполнить подсчет", on_click=lambda e: count_result(directory_path.value)),
                     ft.Text(ref=my_count_ref, value='')]),
             ft.TextButton("Закрыть окно", on_click=lambda e: page.close(dlg_count)),
+        ],
+    )
+    dlg_delete_file = ft.AlertDialog(
+        modal=True,
+        title=ft.Text("Удаление файла."),
+        content=ft.Text("Выберите файл который хотите удалить."),
+        actions=[
+            ft.Row([ft.TextButton("Выбор файла", content=ft.Text("Выбор файла"), on_click=lambda e:
+            (pick_files_dialog.pick_files(allow_multiple=True), handle_menu_item_click(e))), selected_files]),
+            ft.Row([ft.TextButton("Выполнить удаление", on_click=lambda e: delete_file_result(selected_files.value,
+                my_delete_path_ref.current.value)),
+                    ft.Text(ref=my_delete_path_ref, value='')]),
+            ft.TextButton("Закрыть окно", on_click=lambda e: page.close(dlg_delete_file)),
         ],
     )
 
