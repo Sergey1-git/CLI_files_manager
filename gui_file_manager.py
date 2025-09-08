@@ -14,7 +14,11 @@ def main(page: ft.Page):
     my_count_ref = ft.Ref[ft.Text]()
     my_delete_path_ref = ft.Ref[ft.Text]()
     my_delete_folder_ref = ft.Ref[ft.Text]()
-
+    my_find_file_ref = ft.Ref[ft.Text]()
+    my_find_file_folder_ref = ft.Ref[ft.Text]()
+    my_find_file_name_ref = ft.Ref[ft.Text]()
+    my_find_bytes1_ref = ft.Ref[ft.Text]()
+    my_find_bytes2_ref = ft.Ref[ft.Text]()
 
     def handle_menu_item_click(e):
         print(f"{e.control.content.value}.on_click")
@@ -38,6 +42,9 @@ def main(page: ft.Page):
             if e.control.content.value=="Выбор папки" and  current_dialog[0]=='dlg_delete_folder':
                 my_delete_folder_ref.current.value = ''
                 dlg_delete_folder.update()
+            if e.control.content.value == "Выбор папки" and current_dialog[0]=='dlg_find_file':
+                my_find_file_ref.current.value = ''
+                dlg_find_file.update()
 
         page.update()
 
@@ -90,6 +97,12 @@ def main(page: ft.Page):
         if active_dialog=='dlg_delete_folder':
             my_delete_folder_ref.current.value=''
             dlg_delete_folder.update()
+        if active_dialog=='dlg_find_file':
+            my_find_file_ref.current.value=''
+            my_find_file_name_ref.current.value = ''
+            my_find_bytes1_ref.current.value = ''
+            my_find_bytes2_ref.current.value = ''
+            dlg_find_file.update()
         if selected_files.value!='':
             selected_files.value = ''
             selected_files.update()
@@ -303,6 +316,39 @@ def main(page: ft.Page):
             my_delete_folder_ref.current.value = f"Папка {folder_name} успешно удалена."
         dlg_delete_folder.update()
 
+    def find_file_result(path_find_folder, file_name, bytes1,bytes2):
+        result=[]
+        if path_find_folder == "Не выбрано" or path_find_folder == "":
+            my_find_file_ref.current.value = f"Папка не выбрана, повторите выбор"
+        elif my_find_file_name_ref.current.value == "":
+            my_find_file_ref.current.value = f"Имя файла не введено, повторите ввод"
+        elif bytes1 =='' and bytes2 != '':
+            my_find_file_ref.current.value = f"Перенесите ввдеденные данные о размере файла на одно поле выше"
+        elif  bytes1 != '' and bytes1.isdigit() is False:
+            my_find_file_ref.current.value=(f"При указании размера файла были введены символы\n"+
+                                            "не являющиеся цифрами, повторите ввод")
+        elif  bytes2 != '' and bytes2.isdigit() is False:
+            my_find_file_ref.current.value=(f"При указании размера файла были введены символы\n"+
+                                            "не являющиеся цифрами, повторите ввод")
+        else:
+            if bytes1 == '':
+               result=p_cli_fm.search_files_by_criteria(path_find_folder, file_name)
+            elif bytes1 != '' and bytes2 == '':
+                result=p_cli_fm.search_files_by_criteria(path_find_folder, file_name, int(bytes1))
+            elif bytes1 != '' and bytes2 != '':
+                result=p_cli_fm.search_files_by_criteria(path_find_folder, file_name,int(bytes1),int(bytes2))
+            if len(result) == 0:
+               my_find_file_ref.current.value='Файлы подпадающие под выбранные условия не найдены.'
+            else:
+                s=''
+                for i in result:
+                    txt = ', '.join(result[i])
+                    s1 = f'Папка {os.path.basename(i)} файлы: {txt}.\n'
+                    s=s+s1
+                my_find_file_ref.current.value = ("Файлы подпадающие под выбранные условия расположены в следующих"
+                                                  " папках:\n") + s
+        dlg_find_file.update()
+
 
     dlg_test = ft.AlertDialog(
         modal=True,
@@ -367,6 +413,29 @@ def main(page: ft.Page):
             ft.Row([ft.TextButton("Выполнить удаление", on_click=lambda e:
             delete_folder_result(directory_path.value)), ft.Text(ref=my_delete_folder_ref, value='')]),
             ft.TextButton("Закрыть окно", on_click=lambda e: page.close(dlg_delete_folder)),
+        ],
+    )
+    dlg_find_file = ft.AlertDialog(
+        modal=True,
+        title=ft.Text("Поиск  файла по параметрам."),
+        content=ft.Text("Выберите исходную папку для поиска и введите параметры поиска."),
+        actions=[
+            ft.Row([ft.TextButton("Выбор папки", content=ft.Text("Выбор папки", ref=my_find_file_folder_ref),
+                                  on_click=lambda e: (
+                                  get_directory_dialog.get_directory_path(), handle_menu_item_click(e))),
+                    directory_path]),
+            ft.Row([ft.TextField(ref=my_find_file_name_ref, hint_text="Введите имя файла или его часть",
+                                 border_color=ft.Colors.BLUE_300)]),
+            ft.Row([ft.TextField(ref=my_find_bytes1_ref, hint_text="Если необходимо введите минимальный размер файла"
+                                                                   " в байтах", border_color=ft.Colors.BLUE_300,
+                                 max_lines=3)]),
+            ft.Row([ft.TextField(ref=my_find_bytes2_ref, hint_text="Если необходимо введите максимальный размер файла"
+                                                                   " в байтах", border_color=ft.Colors.BLUE_300,
+                                 max_lines=3)]),
+            ft.Row([ft.TextButton("Выполнить поиск", on_click=lambda e: find_file_result(directory_path.value,
+                my_find_file_name_ref.current.value, my_find_bytes1_ref.current.value, my_find_bytes2_ref.current.value)),
+                    ft.Text(ref=my_find_file_ref, value='')]),
+            ft.TextButton("Закрыть окно", on_click=lambda e: page.close(dlg_find_file)),
         ],
     )
 

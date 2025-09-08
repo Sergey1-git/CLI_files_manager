@@ -163,14 +163,7 @@ def search_files_by_criteria(path_folder, pattern, size1=None,size2=None):
                     lf.append(file)
         if len(lf)!=0:
             dict_file[root]=lf
-    if len(dict_file) == 0:
-        print('Файлы подпадающие под выбранные условия не найдены.')
-    else:
-
-        print('Файлы подпадающие под выбранные условия расположены в следующих папках:')
-        for i in dict_file:
-            txt = ','.join(dict_file[i])
-            print(f'Папка {os.path.basename(i)} файлы: {txt}')
+    return dict_file
 
 
 def editing_a_path():
