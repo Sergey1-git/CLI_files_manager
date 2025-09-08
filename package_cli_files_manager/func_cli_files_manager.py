@@ -143,11 +143,14 @@ def delete_folder_and_file(path_folder, file = None):
             os.remove(path_delete)
             print(f'Файл {file} удален из папки {os.path.basename(path_folder)}.')
         elif os.path.isdir(path_delete):
-            rmtree(path_delete) #os.rmdir(path_delete)
+            rmtree(path_delete)  # os.rmdir(path_delete)
             print(f'Папка {os.path.basename(path_folder)} удалена.')
     else:
-        print(f'Невозможно выполнить удаление, так как объект не относится к директории {os.path.basename(path_folder_test)}.')
+        print(
+            f'Невозможно выполнить удаление, так как объект не относится к директории {os.path.basename(path_folder_test)}.')
 
+
+# Функция поиска файлов по критериям.
 def search_files_by_criteria(path_folder, pattern, size1=None,size2=None):
     dict_file={}
     for root, dirs, files in os.walk(path_folder):
