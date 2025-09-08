@@ -11,6 +11,7 @@ def main(page: ft.Page):
     my_text_ref = ft.Ref[ft.Text]()
     my_copy_ref = ft.Ref[ft.Text]()
     my_copy_path_ref = ft.Ref[ft.Text]()
+    my_count_ref = ft.Ref[ft.Text]()
 
 
     def handle_menu_item_click(e):
@@ -26,6 +27,9 @@ def main(page: ft.Page):
             if e.control.content.value == "Выбор папки" and current_dialog[0]=='dlg_copy':
                 my_copy_ref.current.value = ''
                 dlg_copy.update()
+            if e.control.content.value=="Выбор папки" and  current_dialog[0]=='dlg_count':
+                my_count_ref.current.value = ''
+                dlg_count.update()
 
         page.update()
 
@@ -66,6 +70,9 @@ def main(page: ft.Page):
             my_copy_ref.current.value=''
             my_copy_path_ref.current.value=''
             dlg_copy.update()
+        if active_dialog=='dlg_count':
+            my_count_ref.current.value=''
+            dlg_count.update()
         if selected_files.value!='':
             selected_files.value = ''
             selected_files.update()
@@ -250,6 +257,16 @@ def main(page: ft.Page):
             my_copy_ref.current.value = f"Файл {file_name} успешно скопирован."
         dlg_copy.update()
 
+
+    def count_result(path_folder_count):
+        print(path_folder_count)
+        if path_folder_count == "Не выбрано" or path_folder_count=="":
+            my_count_ref.current.value = str(f"Не выбрана папка, повторите выбор")
+        else:
+            my_count_ref.current.value = str(f"Количество файлов равно {p_cli_fm.count_files_recursive(path_folder_count)}.")
+        dlg_count.update()
+
+
     dlg_test = ft.AlertDialog(
         modal=True,
         title=ft.Text("Пожалуйста, подтвердите выбранное действие"),
@@ -276,6 +293,18 @@ def main(page: ft.Page):
             copy_result(my_copy_path_ref.current.value, selected_files.value, directory_path.value)),
                     ft.Text(ref=my_copy_ref, value='')]),
             ft.TextButton("Закрыть окно", on_click=lambda e: page.close(dlg_copy)),
+        ],
+    )
+    dlg_count = ft.AlertDialog(
+        modal=True,
+        title=ft.Text("Выполнить подсчет колличества файлов в выбранной папке."),
+        content=ft.Text("Выберите папку в которой хотите посчитать количество файлов."),
+        actions=[
+            ft.Row([ft.TextButton("Выбор папки", content=ft.Text("Выбор папки"), on_click=lambda e:
+            (get_directory_dialog.get_directory_path(), handle_menu_item_click(e))), directory_path]),
+            ft.Row([ft.TextButton("Выполнить подсчет", on_click=lambda e: count_result(directory_path.value)),
+                    ft.Text(ref=my_count_ref, value='')]),
+            ft.TextButton("Закрыть окно", on_click=lambda e: page.close(dlg_count)),
         ],
     )
 
