@@ -298,7 +298,7 @@ def main(page: ft.Page):
         if path_folder_delete == "Не выбрано" or path_folder_delete == "":
             my_delete_folder_ref.current.value = f"Папка не выбрана, повторите выбор"
         else:
-            delete_folder_and_file(path_folder_delete)
+            p_cli_fm.delete_folder_and_file(path_folder_delete)
             folder_name = os.path.split(path_folder_delete)[1]
             my_delete_folder_ref.current.value = f"Папка {folder_name} успешно удалена."
         dlg_delete_folder.update()
