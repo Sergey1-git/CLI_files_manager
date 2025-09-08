@@ -215,4 +215,17 @@ def main(page: ft.Page):
         ],
     )
     page.add(ft.Row([menubar]))
+
+    dlg_test = ft.AlertDialog(
+        modal=True,
+        title=ft.Text("Пожалуйста, подтвердите выбранное действие"),
+        content=ft.Text("Вы действительно хотите создать папку для тестов ?"),
+        actions=[
+            ft.TextButton("Выполнить", on_click=lambda e: (p_cli_fm.preparing_for_work(os.getcwd()), page.close(dlg_test))),
+            ft.TextButton("Отменить", on_click=lambda e: page.close(dlg_test)),
+        ],
+        actions_alignment=ft.MainAxisAlignment.END,
+        on_dismiss=lambda e: print("Modal dialog dismissed!"),
+    )
+
 ft.app(main)
