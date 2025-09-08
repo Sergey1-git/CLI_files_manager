@@ -13,6 +13,7 @@ def main(page: ft.Page):
     my_copy_path_ref = ft.Ref[ft.Text]()
     my_count_ref = ft.Ref[ft.Text]()
     my_delete_path_ref = ft.Ref[ft.Text]()
+    my_delete_folder_ref = ft.Ref[ft.Text]()
 
 
     def handle_menu_item_click(e):
@@ -34,6 +35,9 @@ def main(page: ft.Page):
             if e.control.content.value=="Выбор файла" and  current_dialog[0]=='dlg_delete_file':
                 my_delete_path_ref.current.value = ''
                 dlg_delete_file.update()
+            if e.control.content.value=="Выбор папки" and  current_dialog[0]=='dlg_delete_folder':
+                my_delete_folder_ref.current.value = ''
+                dlg_delete_folder.update()
 
         page.update()
 
@@ -83,6 +87,9 @@ def main(page: ft.Page):
         if active_dialog=='dlg_delete_file':
             my_delete_path_ref.current.value=''
             dlg_delete_file.update()
+        if active_dialog=='dlg_delete_folder':
+            my_delete_folder_ref.current.value=''
+            dlg_delete_folder.update()
         if selected_files.value!='':
             selected_files.value = ''
             selected_files.update()
@@ -276,6 +283,7 @@ def main(page: ft.Page):
             my_count_ref.current.value = str(f"Количество файлов равно {p_cli_fm.count_files_recursive(path_folder_count)}.")
         dlg_count.update()
 
+
     def delete_file_result(file_name, path_file):
         path_folder_file=os.path.split(path_file)[0]
         if file_name == "Не выбрано" or file_name == "":
@@ -284,6 +292,16 @@ def main(page: ft.Page):
             p_cli_fm.delete_folder_and_file(path_folder_file, file_name)
             my_delete_path_ref.current.value = f"Файл {file_name} успешно удален."
         dlg_delete_file.update()
+
+
+    def delete_folder_result(path_folder_delete):
+        if path_folder_delete == "Не выбрано" or path_folder_delete == "":
+            my_delete_folder_ref.current.value = f"Папка не выбрана, повторите выбор"
+        else:
+            delete_folder_and_file(path_folder_delete)
+            folder_name = os.path.split(path_folder_delete)[1]
+            my_delete_folder_ref.current.value = f"Папка {folder_name} успешно удалена."
+        dlg_delete_folder.update()
 
 
     dlg_test = ft.AlertDialog(
@@ -337,6 +355,18 @@ def main(page: ft.Page):
                 my_delete_path_ref.current.value)),
                     ft.Text(ref=my_delete_path_ref, value='')]),
             ft.TextButton("Закрыть окно", on_click=lambda e: page.close(dlg_delete_file)),
+        ],
+    )
+    dlg_delete_folder = ft.AlertDialog(
+        modal=True,
+        title=ft.Text("Удаление папки."),
+        content=ft.Text("Выберите папку которую хотите удалить."),
+        actions=[
+            ft.Row([ft.TextButton("Выбор папки", content=ft.Text("Выбор папки"), on_click=lambda e:
+            (get_directory_dialog.get_directory_path(), handle_menu_item_click(e))), directory_path]),
+            ft.Row([ft.TextButton("Выполнить удаление", on_click=lambda e:
+            delete_folder_result(directory_path.value)), ft.Text(ref=my_delete_folder_ref, value='')]),
+            ft.TextButton("Закрыть окно", on_click=lambda e: page.close(dlg_delete_folder)),
         ],
     )
 
