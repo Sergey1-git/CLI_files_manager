@@ -185,8 +185,6 @@ def main(page: ft.Page):
         controls=[
             ft.SubmenuButton(
                 content=ft.Text("Help"),
-                # width=50,
-                # height=50,
                 style=ft.ButtonStyle(
                     alignment=ft.alignment.center_right),
                 controls=[
