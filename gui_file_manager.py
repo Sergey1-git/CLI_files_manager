@@ -7,6 +7,7 @@ import package_cli_files_manager as p_cli_fm
 current_dialog=[]
 
 def main(page: ft.Page):
+    # Ссылки на  виджеты.
     appbar_text_ref = ft.Ref[ft.Text]()
     my_text_ref = ft.Ref[ft.Text]()
     my_copy_ref = ft.Ref[ft.Text]()
@@ -26,6 +27,7 @@ def main(page: ft.Page):
             ft.SnackBar(content=ft.Text(f"{e.control.content.value} was clicked!"))
         )
         appbar_text_ref.current.value = e.control.content.value
+        # Условия очистки volue виджета с результатом при нажатии кнопок "Выбор файла" или "Выбор папки".
         if len(current_dialog) != 0:
             if e.control.content.value=="Выбор файла" and current_dialog[0]=='dlg_copy':
                 my_copy_ref.current.value = ''
@@ -48,7 +50,7 @@ def main(page: ft.Page):
 
         page.update()
 
-
+    # Функция выбора файла при нажатии кнопки "Выбор файла".
     def pick_files_result(e: ft.FilePickerResultEvent):
 
         selected_files.value = (
@@ -62,12 +64,12 @@ def main(page: ft.Page):
             my_delete_path_ref.current.value=e.files[0].path if e.files else ""
             my_delete_path_ref.current.update()
 
-
     pick_files_dialog = ft.FilePicker(on_result=pick_files_result)
-
     selected_files = ft.Text('')
     page.overlay.append(pick_files_dialog)
 
+
+    # Функция выбора папки при нажатии кнопки "Выбор папки".
     def get_directory_result(e: FilePickerResultEvent):
         directory_path.value = e.path if e.path else "Не выбрано"
         directory_path.update()
@@ -76,7 +78,7 @@ def main(page: ft.Page):
     directory_path = Text('')
     page.overlay.append( get_directory_dialog)
 
-
+    # Функция open_dialog фиксирует какое диалоговое окно открыто и очищает volue виджета диалогового окгна при открытии.
     def open_dialog(dialog):
         active_dialog=dialog
         if len(current_dialog)==0:
@@ -110,6 +112,7 @@ def main(page: ft.Page):
             directory_path.value = ''
             directory_path.update()
 
+    # Функция вывода Help информации.
     def print_help(e):
         handle_menu_item_click(e)
         my_dict = {
@@ -164,7 +167,7 @@ def main(page: ft.Page):
                 page.add(ft.Text(ref = my_text_ref, value = my_dict[e.control.content.value]))
 
     page.appbar = ft.AppBar(
-        title=ft.Text("Menus", ref=appbar_text_ref),
+        title=ft.Text("Поле отображения нажатого виджета", ref=appbar_text_ref),
         center_title=True,
         bgcolor=ft.Colors.ORANGE_100,
     )
@@ -275,6 +278,8 @@ def main(page: ft.Page):
     )
     page.add(ft.Row([menubar]))
 
+
+    # Функция copy_result проверяет корректность ввода данных и формирует полученный результат.
     def copy_result(path_root_folder,file_name,path_folder_record):
         print(path_root_folder,file_name,path_folder_record)
         path_folder_file = os.path.split(path_root_folder)[0]
@@ -288,6 +293,7 @@ def main(page: ft.Page):
         dlg_copy.update()
 
 
+    # Функция count_result проверяет корректность ввода данных и формирует полученный результат.
     def count_result(path_folder_count):
         print(path_folder_count)
         if path_folder_count == "Не выбрано" or path_folder_count=="":
@@ -296,7 +302,7 @@ def main(page: ft.Page):
             my_count_ref.current.value = str(f"Количество файлов равно {p_cli_fm.count_files_recursive(path_folder_count)}.")
         dlg_count.update()
 
-
+    # Функция delete_file_result проверяет корректность ввода данных и формирует полученный результат.
     def delete_file_result(file_name, path_file):
         path_folder_file=os.path.split(path_file)[0]
         if file_name == "Не выбрано" or file_name == "":
@@ -306,7 +312,7 @@ def main(page: ft.Page):
             my_delete_path_ref.current.value = f"Файл {file_name} успешно удален."
         dlg_delete_file.update()
 
-
+    # Функция delete_folder_result проверяет корректность ввода данных и формирует полученный результат.
     def delete_folder_result(path_folder_delete):
         if path_folder_delete == "Не выбрано" or path_folder_delete == "":
             my_delete_folder_ref.current.value = f"Папка не выбрана, повторите выбор"
@@ -316,6 +322,7 @@ def main(page: ft.Page):
             my_delete_folder_ref.current.value = f"Папка {folder_name} успешно удалена."
         dlg_delete_folder.update()
 
+    # Функция find_file_result проверяет корректность ввода данных и формирует полученный результат.
     def find_file_result(path_find_folder, file_name, bytes1,bytes2):
         result=[]
         if path_find_folder == "Не выбрано" or path_find_folder == "":
@@ -349,7 +356,7 @@ def main(page: ft.Page):
                                                   " папках:\n") + s
         dlg_find_file.update()
 
-
+    # Диалоговые окна
     dlg_test = ft.AlertDialog(
         modal=True,
         title=ft.Text("Пожалуйста, подтвердите выбранное действие"),
@@ -358,8 +365,6 @@ def main(page: ft.Page):
             ft.TextButton("Выполнить", on_click=lambda e: (p_cli_fm.preparing_for_work(os.getcwd()), page.close(dlg_test))),
             ft.TextButton("Отменить", on_click=lambda e: page.close(dlg_test)),
         ],
-        actions_alignment=ft.MainAxisAlignment.END,
-        on_dismiss=lambda e: print("Modal dialog dismissed!"),
     )
 
     dlg_copy = ft.AlertDialog(
