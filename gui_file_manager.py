@@ -9,8 +9,9 @@ current_dialog=[]
 def main(page: ft.Page):
     appbar_text_ref = ft.Ref[ft.Text]()
     my_text_ref = ft.Ref[ft.Text]()
+    my_copy_ref = ft.Ref[ft.Text]()
+    my_copy_path_ref = ft.Ref[ft.Text]()
 
-    current_dialog = []
 
     def handle_menu_item_click(e):
         print(f"{e.control.content.value}.on_click")
@@ -18,6 +19,13 @@ def main(page: ft.Page):
             ft.SnackBar(content=ft.Text(f"{e.control.content.value} was clicked!"))
         )
         appbar_text_ref.current.value = e.control.content.value
+        if len(current_dialog) != 0:
+            if e.control.content.value=="Выбор файла" and current_dialog[0]=='dlg_copy':
+                my_copy_ref.current.value = ''
+                dlg_copy.update()
+            if e.control.content.value == "Выбор папки" and current_dialog[0]=='dlg_copy':
+                my_copy_ref.current.value = ''
+                dlg_copy.update()
 
         page.update()
 
@@ -28,6 +36,9 @@ def main(page: ft.Page):
             ", ".join(map(lambda f: f.name, e.files)) if e.files else "Не выбрано"
         )
         selected_files.update()
+        if current_dialog[0]=='dlg_copy':
+            my_copy_path_ref.current.value=e.files[0].path if e.files else ""
+            my_copy_path_ref.current.update()
 
 
     pick_files_dialog = ft.FilePicker(on_result=pick_files_result)
@@ -50,6 +61,17 @@ def main(page: ft.Page):
             current_dialog.append(active_dialog)
         else:
             current_dialog[0]=active_dialog
+        print(active_dialog)
+        if active_dialog=='dlg_copy':
+            my_copy_ref.current.value=''
+            my_copy_path_ref.current.value=''
+            dlg_copy.update()
+        if selected_files.value!='':
+            selected_files.value = ''
+            selected_files.update()
+        if directory_path.value!='':
+            directory_path.value = ''
+            directory_path.update()
 
     def print_help(e):
         handle_menu_item_click(e)
@@ -216,6 +238,18 @@ def main(page: ft.Page):
     )
     page.add(ft.Row([menubar]))
 
+    def copy_result(path_root_folder,file_name,path_folder_record):
+        print(path_root_folder,file_name,path_folder_record)
+        path_folder_file = os.path.split(path_root_folder)[0]
+        if file_name=="Не выбрано" or file_name=="":
+            my_copy_ref.current.value = f"Не выбран файл, повторите выбор"
+        elif path_folder_record == "Не выбрано" or path_folder_record == "":
+            my_copy_ref.current.value = f"Не выбрана папка, повторите выбор"
+        else:
+            p_cli_fm.copy_file(path_folder_file,file_name,path_folder_record)
+            my_copy_ref.current.value = f"Файл {file_name} успешно скопирован."
+        dlg_copy.update()
+
     dlg_test = ft.AlertDialog(
         modal=True,
         title=ft.Text("Пожалуйста, подтвердите выбранное действие"),
@@ -226,6 +260,23 @@ def main(page: ft.Page):
         ],
         actions_alignment=ft.MainAxisAlignment.END,
         on_dismiss=lambda e: print("Modal dialog dismissed!"),
+    )
+
+    dlg_copy = ft.AlertDialog(
+        modal=True,
+        title=ft.Text("Копирование файла в указанную папку."),
+        content=ft.Text("Выберите файл и папку для копирования."),
+        actions=[
+            ft.Row([ft.TextButton("Выбор файла", content=ft.Text("Выбор файла"), on_click=lambda e:
+            (pick_files_dialog.pick_files(allow_multiple=True), handle_menu_item_click(e))), selected_files,
+                    ft.Text(ref=my_copy_path_ref, value='')]),
+            ft.Row([ft.TextButton("Выбор папки", content=ft.Text("Выбор папки"), on_click=lambda e:
+            (get_directory_dialog.get_directory_path(), handle_menu_item_click(e))), directory_path]),
+            ft.Row([ft.TextButton("Выполнить копирование", on_click=lambda e:
+            copy_result(my_copy_path_ref.current.value, selected_files.value, directory_path.value)),
+                    ft.Text(ref=my_copy_ref, value='')]),
+            ft.TextButton("Закрыть окно", on_click=lambda e: page.close(dlg_copy)),
+        ],
     )
 
 ft.app(main)
