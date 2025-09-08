@@ -205,3 +205,5 @@ cython_debug/
 marimo/_static/
 marimo/_lsp/
 __marimo__/
+folder_test/
+package_cli_files_manager/folder_test/
